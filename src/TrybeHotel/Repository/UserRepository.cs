@@ -17,21 +17,51 @@ namespace TrybeHotel.Repository
 
         public UserDto Login(LoginDto login)
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
         }
         public UserDto Add(UserDtoInsert user)
         {
-            throw new NotImplementedException(); 
+            var newUser = new User
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Password = user.Password,
+                UserType = "client",
+            };
+
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
+
+            return new UserDto
+            {
+                UserId = newUser.UserId,
+                Name = newUser.Name,
+                Email = newUser.Email,
+                UserType = newUser.UserType
+            };
         }
 
         public UserDto GetUserByEmail(string userEmail)
         {
-            throw new NotImplementedException();
+            var user = _context.Users.FirstOrDefault(user => user.Email == userEmail);
+
+            if (user == null)
+            {
+                return null!;
+            }
+
+            return new UserDto
+            {
+                UserId = user.UserId,
+                Name = user.Name,
+                Email = user.Email,
+                UserType = user.UserType,
+            };
         }
 
         public IEnumerable<UserDto> GetUsers()
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
     }
