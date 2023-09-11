@@ -13,15 +13,21 @@ namespace TrybeHotel.Controllers
         {
             _repository = repository;
         }
-        
+
+
         [HttpGet]
-        public IActionResult GetCities(){
-            throw new NotImplementedException();
+        public IActionResult GetCities()
+        {
+            var cities = _repository.GetCities();
+            return Ok(cities);
         }
 
+
         [HttpPost]
-        public IActionResult PostCity([FromBody] City city){
-            throw new NotImplementedException();
+        public IActionResult PostCity([FromBody] City city)
+        {
+            var result = _repository.AddCity(city);
+            return Created("", result);
         }
     }
 }
