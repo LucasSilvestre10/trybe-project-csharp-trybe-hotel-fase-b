@@ -22,7 +22,7 @@ namespace TrybeHotel.Services
         public string Generate(UserDto user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_tokenOptions.Secret);
+            var key = Encoding.ASCII.GetBytes(_tokenOptions.Secret!);            
             var claims = AddClaims(user);
             var tokenDescriptor = new SecurityTokenDescriptor
             {

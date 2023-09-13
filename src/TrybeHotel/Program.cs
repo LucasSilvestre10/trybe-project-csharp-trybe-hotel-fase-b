@@ -54,7 +54,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    
+    options.AddPolicy("admin", policy => policy.RequireClaim(ClaimTypes.Role, "admin"));
+    options.AddPolicy("client", policy => policy.RequireClaim(ClaimTypes.Role, "client")); 
 });
 
 var app = builder.Build();
