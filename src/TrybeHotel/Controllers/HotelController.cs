@@ -27,7 +27,7 @@ namespace TrybeHotel.Controllers
 
         
         [HttpPost]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "admin")]
         public IActionResult PostHotel([FromBody] Hotel hotel)
         {
             var result = _repository.AddHotel(hotel);
