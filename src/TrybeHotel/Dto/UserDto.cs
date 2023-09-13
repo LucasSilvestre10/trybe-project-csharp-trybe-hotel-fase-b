@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace TrybeHotel.Dto
 {
     public class UserDto
@@ -17,6 +19,7 @@ namespace TrybeHotel.Dto
 
     public class LoginDto
     {
+        [EmailAddress]
         public string? Email { get; set; }
         public string? Password { get; set; }
     }
