@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrybeHotel.Models;
 using TrybeHotel.Repository;
@@ -15,20 +16,23 @@ namespace TrybeHotel.Controllers
         }
 
         [HttpGet("{HotelId}")]
-        public IActionResult GetRoom(int HotelId){
+        public IActionResult GetRoom(int HotelId)
+        {
             var result = _repository.GetRooms(HotelId);
             return Ok(result);
         }
 
-      
+
         [HttpPost]
-        public IActionResult PostRoom([FromBody] Room room){
-             var result = _repository.AddRoom(room);
+        [Authorize(Policy = "admin")]
+        public IActionResult PostRoom([FromBody] Room room)
+        {
+            var result = _repository.AddRoom(room);
             return Created("", result);
         }
 
-    
-        [HttpDelete("{RoomId}")]
+
+        [HttpDelete("{RoomId}")]       
         public IActionResult Delete(int RoomId)
         {
             _repository.DeleteRoom(RoomId);
