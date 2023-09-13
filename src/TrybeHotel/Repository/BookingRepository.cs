@@ -1,5 +1,6 @@
 using TrybeHotel.Models;
 using TrybeHotel.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace TrybeHotel.Repository
 {
@@ -63,7 +64,41 @@ namespace TrybeHotel.Repository
 
         public BookingResponse GetBooking(int bookingId, string email)
         {
-            throw new NotImplementedException();
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            var booking = _context.Bookings
+                .Include(b => b.Room)
+                .ThenInclude(r => r!.Hotel)
+                .ThenInclude(h => h!.City)
+                .FirstOrDefault(b => b.BookingId == bookingId);
+
+            if (user == null || booking == null)
+                return null!;
+
+            if (booking.UserId != user.UserId)
+                return null!;
+
+            return new BookingResponse
+            {
+                BookingId = booking.BookingId,
+                CheckIn = booking.CheckIn,
+                CheckOut = booking.CheckOut,
+                GuestQuant = booking.GuestQuant,
+                Room = new RoomDto
+                {
+                    RoomId = booking.Room!.RoomId,
+                    Name = booking.Room.Name,
+                    Capacity = booking.Room.Capacity,
+                    Image = booking.Room.Image,
+                    Hotel = new HotelDto
+                    {
+                        HotelId = booking.Room.Hotel!.HotelId,
+                        Name = booking.Room.Hotel.Name,
+                        Address = booking.Room.Hotel.Address,
+                        CityId = booking.Room.Hotel.City!.CityId,
+                        CityName = booking.Room.Hotel.City.Name
+                    }
+                }
+            };
         }
 
         public Room GetRoomById(int RoomId)

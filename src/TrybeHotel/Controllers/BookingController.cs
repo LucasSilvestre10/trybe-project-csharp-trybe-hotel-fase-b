@@ -11,7 +11,7 @@ namespace TrybeHotel.Controllers
 {
     [ApiController]
     [Route("booking")]
-  
+
     public class BookingController : Controller
     {
         private readonly IBookingRepository _repository;
@@ -22,13 +22,16 @@ namespace TrybeHotel.Controllers
 
         [HttpPost]
         [Authorize(Policy = "client")]
-        public IActionResult Add([FromBody] BookingDtoInsert bookingInsert){
+        public IActionResult Add([FromBody] BookingDtoInsert bookingInsert)
+        {
             // throw new NotImplementedException();
             var userEmail = User.FindFirst(ClaimTypes.Email)!.Value;
             var newBook = _repository.Add(bookingInsert, userEmail);
 
-            if (newBook == null) {
-                return BadRequest(new {
+            if (newBook == null)
+            {
+                return BadRequest(new
+                {
                     message = "Guest quantity over room capacity"
                 });
             }
@@ -38,8 +41,15 @@ namespace TrybeHotel.Controllers
 
 
         [HttpGet("{Bookingid}")]
-        public IActionResult GetBooking(int Bookingid){
-           throw new NotImplementedException();
+        [Authorize(Policy = "client")]
+        public IActionResult GetBooking(int Bookingid)
+        {
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var booking = _repository.GetBooking(Bookingid, userEmail!);
+            if (booking == null)
+                return Unauthorized(new { message = "Booking not found" });
+
+            return Ok(booking);
         }
     }
 }
