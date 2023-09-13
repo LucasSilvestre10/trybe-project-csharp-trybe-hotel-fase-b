@@ -47,6 +47,10 @@ namespace TrybeHotel.Services
             {
                 claimsAdmin.AddClaim(new Claim(ClaimTypes.Role, "admin"));
             }
+            if (user.UserType == "client")
+            {
+                claimsAdmin.AddClaim(new Claim(ClaimTypes.Role, "client"));
+            }
 
             return claimsAdmin;
         }
